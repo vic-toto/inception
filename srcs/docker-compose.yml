@@ -1,0 +1,56 @@
+version: '3'
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    ports:
+      - "443:443"
+    volumes:
+      - type: bind
+        source: ./nginx/default.conf
+        target: /etc/nginx/conf.d/default.conf
+      - type: bind
+        source: ./nginx/ssl.conf
+        target: /etc/nginx/ssl.conf
+#      - type: bind
+#        source: ./srcs/nginx/cert.pem
+#        target: /etc/nginx/ssl/cert.pem
+#      - type: bind
+#       source: .srcs/nginx/key.pem
+#        target: /etc/nginx/ssl/key.pem
+      
+  wordpress:
+    build:
+      context: .
+      dockerfile: Dockerfile-wordpress
+    ports:
+      - "9000:9000"
+    volumes:
+      - type: bind
+        source: ./srcs/wordpress/wp-content
+        target: /var/www/html/wp-content
+      - type: volume
+        source: wordpress_db
+        target: /var/lib/mysql
+  mariadb:
+    build:
+      context: .
+      dockerfile: Dockerfile-mariadb
+    volumes:
+      - type: volume
+        source: wordpress_db
+        target: /var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+
+volumes:
+  wordpress_db:
+
+networks:
+  default:
+    driver: bridge
+
