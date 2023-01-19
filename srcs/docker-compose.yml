@@ -42,7 +42,7 @@ services:
      dockerfile: Dockerfile-mariadb
    volumes:
      - type: volume
-       source: wordpress_db
+       source: wordpress_volume
        target: /var/lib/mysql
    environment:
      MYSQL_ROOT_PASSWORD: mypassword
@@ -50,8 +50,9 @@ services:
      MYSQL_USER: wordpress
      MYSQL_PASSWORD: wordpress
 #
-#volumes:
-#  wordpress_db:
+volumes:
+ wordpress_volume:
+ mariadb_volume:
 #
 #networks:
 #  default:
