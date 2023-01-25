@@ -9,6 +9,7 @@ RUN apk update && apk add --no-cache \
     wget
 
 RUN wget https://wordpress.org/latest.tar.gz -O /tmp/wordpress.tar.gz \
+    && mkdir /var/www \
     && tar -xvzf /tmp/wordpress.tar.gz -C /var/www/ \
     && rm /tmp/wordpress.tar.gz \
     && mv /var/www/wordpress/* /var/www/ \
@@ -19,6 +20,6 @@ COPY config/php-fpm.conf /etc/php7/php-fpm.conf
 COPY config/www.conf /etc/php7/php-fpm.d/www.conf
 COPY config/wp-config.php /var/www/wp-config.php
 
-EXPOSE 9000
+#EXPOSE 9000
 
 CMD ["php-fpm7", "-F"]
