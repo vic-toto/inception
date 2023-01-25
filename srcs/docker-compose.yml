@@ -1,3 +1,6 @@
+# come risolvere l'errore
+# devo aggiungere le path dei volumi nei container qua sotto ma ora non ne ho voglia
+
 version: '3'
 services:
 
@@ -37,5 +40,17 @@ services:
       - MYSQL_PASSWORD=password
 
 volumes:
-  wordpress_volume:
   mariadb_volume:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${MARIADB_HOST_VOLUME_PATH}
+
+  wordpress_volume:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ${WORDPRESS_HOST_VOLUME_PATH}
+
