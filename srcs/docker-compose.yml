@@ -9,6 +9,8 @@ services:
       context: ./requirements/nginx
       dockerfile: Dockerfile
     container_name: nginx
+    networks:
+      - inception
     ports:
       - "443:443"
     volumes:
@@ -19,25 +21,30 @@ services:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
     container_name: wordpress
+    networks:
+      - inception
     ports:
       - "9000:9000"
     volumes:
-      - wordpress_volume:/
+      - wordpress_volume:/var/www/wordpress
 
   mariadb:
     build:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
     container_name: mariadb
+    networks:
+      - inception
     ports:
       - 3306:3306
     volumes:
-      - mariadb_volume:/ # da mettere
+      - mariadb_volume:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=dbname
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
+      - DB_NAME=dbname
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_HOST=mariadb
 
 volumes:
   mariadb_volume:
@@ -53,4 +60,9 @@ volumes:
       type: 'none'
       o: 'bind'
       device: ${WORDPRESS_HOST_VOLUME_PATH}
+
+networks:
+  inception:
+    driver: bridge
+    name: inception
 

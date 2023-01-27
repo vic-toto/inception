@@ -10,6 +10,7 @@ RUN apk update && apk add --no-cache \
 
 RUN wget https://wordpress.org/latest.tar.gz -O /tmp/wordpress.tar.gz \
     && mkdir /var/www \
+    && mkdir /var/www/wordpress \
     && tar -xvzf /tmp/wordpress.tar.gz -C /var/www/ \
     && rm /tmp/wordpress.tar.gz \
     && mv /var/www/wordpress/* /var/www/ \
