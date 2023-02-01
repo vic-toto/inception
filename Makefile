@@ -1,6 +1,6 @@
 DOCKER_COMPOSE_PATH	=	./srcs/docker-compose.yml
 
-DATA_PATH			= /home/croce/data
+DATA_PATH			= /home/croce/Desktop/data
 DB_PATH				= $(DATA_PATH)/db/
 WP_PATH				= $(DATA_PATH)/wp/
 
@@ -10,7 +10,8 @@ all: start
 #  up		Create and start containers
 #  build	Build or rebuild services
 start:
-	@ mkdir -p $(DB_PATH) $(WP_PATH)
+	@ sudo mkdir -p $(DB_PATH) $(WP_PATH)
+	@ sudo grep -qxF '127.0.0.1 gcrocett.42.fr' /etc/hosts || sudo echo '127.0.0.1 gcrocett.42.fr'
 	@ sudo docker-compose -f $(DOCKER_COMPOSE_PATH) up --build
 
 #  down		Stop and remove containers, networks, images, and volumes
