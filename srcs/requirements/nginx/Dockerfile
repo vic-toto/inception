@@ -6,11 +6,6 @@ RUN mkdir -p /etc/ssl/
 RUN mkdir -p /etc/ssl/certs/
 RUN mkdir -p /etc/ssl/private/
 
-#prova
-RUN mkdir -p /usr/share/nginx/html/
-COPY conf/index.html /usr/share/nginx/html/index.html
-#
-
 RUN rm /etc/nginx/http.d/default.conf
 RUN rmdir /etc/nginx/http.d
 
@@ -18,5 +13,7 @@ RUN openssl req -x509 -newkey rsa:2048 -nodes -keyout /etc/ssl/private/key.pem -
 
 COPY conf/default.conf /etc/nginx/nginx.conf
 COPY conf/ssl.conf /etc/nginx/ssl.conf
+
+
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
