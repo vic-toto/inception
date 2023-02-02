@@ -1,3 +1,5 @@
+<?php
+
 $WP_DB_NAME = getenv('WP_DB_NAME');
 $WP_DB_USR = getenv('WP_DB_USR');
 $WP_DB_PWD = getenv('WP_DB_PWD');
@@ -23,3 +25,33 @@ define('WP_ADMIN_EMAIL', $WP_ADMIN_EMAIL);
 define('WP_USR', $WP_USR);
 define('WP_EMAIL', $WP_EMAIL);
 define('WP_PWD', $WP_PWD);
+
+$table_prefix = 'wp_';
+
+/**
+ * For developers: WordPress debugging mode.
+ *
+ * Change this to true to enable the display of notices during development.
+ * It is strongly recommended that plugin and theme developers use WP_DEBUG
+ * in their development environments.
+ *
+ * For information on other constants that can be used for debugging,
+ * visit the documentation.
+ *
+ * @link https://wordpress.org/support/article/debugging-in-wordpress/
+ */
+define( 'WP_DEBUG', false );
+
+/* Add any custom values between this line and the "stop editing" line. */
+
+
+
+/* That's all, stop editing! Happy publishing. */
+
+/** Absolute path to the WordPress directory. */
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', __DIR__ . '/' );
+}
+
+/** Sets up WordPress vars and included files. */
+require_once ABSPATH . 'wp-settings.php';

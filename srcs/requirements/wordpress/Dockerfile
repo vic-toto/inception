@@ -36,12 +36,17 @@ COPY config/wp-config.php /var/www/wp-config.php
 RUN mkdir /run/php
 RUN sed "s/listen = \/run\/php\/php7.3-fpm.sock/listen = 9000/" -i /etc/php7/php-fpm.d/www.conf
 RUN touch /var/log/php7.3-fpm.log
+RUN chown -R root:root /run/php /var/log/php7.3-fpm.log 
 
-RUN chown -R root:root /run/php /var/log/php7.3-fpm.log /var/www/
+RUN adduser -u 1007 -D -S -G root www-data
 
-USER root
+
+USER www-data
+
+
+RUN chown -R www-data:www-data /var/www
+
 WORKDIR /var/www/
-
 RUN wp user create $WP_USR $WP_EMAIL --user_pass=$WP_PWD --role=subscriber
 
 #EXPOSE 9000
