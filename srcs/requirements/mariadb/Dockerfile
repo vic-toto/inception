@@ -1,8 +1,9 @@
-FROM alpine:latest
-RUN apk update && apk add mariadb mariadb-client
-RUN mkdir -p /run/mysqld
-RUN chown -R mysql:mysql /run/mysqld
-COPY conf/my.cnf /etc/mysql/conf.d
-RUN apk add --no-cache tzdata
-RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
-CMD ["mysqld", "--user=mysql"]
+FROM alpine:3.13
+
+RUN	apk update && apk upgrade && apk add --no-cache \
+        mariadb \
+        mariadb-client
+        
+COPY tools/config.sh /tmp/configure.sh
+
+ENTRYPOINT ["sh", "/tmp/configure.sh"]
