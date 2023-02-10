@@ -75,7 +75,7 @@ COPY config/php-fpm.conf /etc/php7/php-fpm.conf
 COPY config/www.conf /etc/php7/php-fpm.d/www.conf
 #COPY config/wp-config.php /var/www/wp-config.php
 
-COPY config/index.html /tmp/index.html
+#COPY config/index.html /tmp/index.html
 
     #Config php-fpm
 #RUN mkdir /run/php
@@ -87,12 +87,13 @@ RUN cp wp-cli.phar /usr/bin/wp
 #RUN chown -R root:root /run/php /var/log/php7.3-fpm.log 
 #RUN chown -R www-data:www-data /var/www
 
-WORKDIR /var/www/html/wordpress
+WORKDIR /var/www/html
 #USER www-data
 #WORKDIR /var/www/
 
 #RUN wp user create $WP_USR $WP_EMAIL --user_pass=$WP_PWD --role=subscriber --allow-root
-
+RUN find . -type d -exec chmod 755 {} \;
+RUN find . -type f -exec chmod 644 {} \;
 #EXPOSE 9000
 COPY tools/configure.sh /tmp/configure.sh
 #CMD ["/usr/sbin/php-fpm7", "--nodaemonize", "-c", "/etc/php7/php-fpm.conf"]

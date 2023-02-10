@@ -1,6 +1,3 @@
-# come risolvere l'errore
-# devo aggiungere le path dei volumi nei container qua sotto ma ora non ne ho voglia
-
 version: '3'
 services:
 

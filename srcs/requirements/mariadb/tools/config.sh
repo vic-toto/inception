@@ -27,6 +27,8 @@ DROP DATABASE test;
 DELETE FROM mysql.db WHERE Db='test';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 
+GRANT ALL ON *.* TO '${WP_DB_USR}'@'%' IDENTIFIED BY '${WP_DB_PWD}';
+GRANT ALL ON *.* TO '${WP_DB_USR}'@'localhost' IDENTIFIED BY '${WP_DB_PWD}';
 ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PWD';
 
 CREATE DATABASE $WP_DB_NAME CHARACTER SET utf8 COLLATE utf8_general_ci;

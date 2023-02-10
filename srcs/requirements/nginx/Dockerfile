@@ -14,6 +14,4 @@ RUN openssl req -x509 -newkey rsa:2048 -nodes -keyout /etc/ssl/private/key.pem -
 COPY conf/default.conf /etc/nginx/nginx.conf
 COPY conf/ssl.conf /etc/nginx/ssl.conf
 
-
-
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
