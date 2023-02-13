@@ -1,49 +1,43 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ ! -d "/run/mysqld" ]; then
+if [ ! -d "/run/mysqld" ]
+then
 	mkdir -p /run/mysqld
 	chown -R mysql:mysql /run/mysqld
 fi
 
-if [ ! -d "/var/lib/mysql/mysql" ]; then
-	
+if [ ! -d "/var/lib/mysql/$WP_DB_NAME" ]
+then
 	chown -R mysql:mysql /var/lib/mysql
-
-	# init database
 	mysql_install_db --basedir=/usr --datadir=/var/lib/mysql --user=mysql --rpm > /dev/null
+	tmp=`mktemp`
 
-	tfile=`mktemp`
-	if [ ! -f "$tfile" ]; then
+	if [ ! -f "$tmp" ]
+	then
 		return 1
 	fi
 
-	# https://stackoverflow.com/questions/10299148/mysql-error-1045-28000-access-denied-for-user-billlocalhost-using-passw
-	cat << EOF > $tfile
+	cat << EOF > $tmp
 USE mysql;
 FLUSH PRIVILEGES;
-
-DELETE FROM	mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='';
 DROP DATABASE test;
 DELETE FROM mysql.db WHERE Db='test';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
-
-GRANT ALL ON *.* TO '${WP_DB_USR}'@'%' IDENTIFIED BY '${WP_DB_PWD}';
-GRANT ALL ON *.* TO '${WP_DB_USR}'@'localhost' IDENTIFIED BY '${WP_DB_PWD}';
 ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PWD';
-
-CREATE DATABASE $WP_DB_NAME CHARACTER SET utf8 COLLATE utf8_general_ci;
-CREATE USER '$WP_DB_USR'@'%' IDENTIFIED by '$WP_DB_PWD';
+CREATE DATABASE $WP_DB_NAME DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+CREATE USER '$WP_DB_USR'@'%' IDENTIFIED BY '$WP_DB_PWD';
 GRANT ALL PRIVILEGES ON $WP_DB_NAME.* TO '$WP_DB_USR'@'%';
-
 FLUSH PRIVILEGES;
 EOF
-	# run init.sql
-	/usr/bin/mysqld --user=mysql --bootstrap < $tfile
-	rm -f $tfile
+
+	/usr/bin/mysqld --user=mysql --bootstrap < $tmp
+	rm -f $tmp
 fi
 
-# allow remote connections
-sed -i "s|skip-networking|# skip-networking|g" /etc/my.cnf.d/mariadb-server.cnf
-sed -i "s|.*bind-address\s*=.*|bind-address=0.0.0.0|g" /etc/my.cnf.d/mariadb-server.cnf
+sed -i 's/skip-networking/# skip-networking/g' /etc/my.cnf.d/mariadb-server.cnf
+sed -i "s/#bind-address=.*/bind-address=0.0.0.0/g" /etc/my.cnf.d/mariadb-server.cnf
+
+echo "MariaDB starting"
 
 exec /usr/bin/mysqld --user=mysql --console

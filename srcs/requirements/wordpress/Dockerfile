@@ -53,9 +53,7 @@ RUN apk update && apk add --no-cache \
     tar                 \
     redis
 
-RUN	adduser -S www-data &&	addgroup -S www-data
-#RUN adduser -u 1007 -D -S -G root www-data
-#RUN addgroup -g 1007 www-data
+RUN adduser -D -S -G root www-data
 #RUN addgroup www-data root
 
 #RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -63,8 +61,8 @@ RUN	adduser -S www-data &&	addgroup -S www-data
 #RUN mv wp-cli.phar /usr/local/bin/wp
 
 #RUN wget https://wordpress.org/latest.tar.gz -O /tmp/wordpress.tar.gz \
-#    && mkdir /var/www \
-#    && mkdir /var/www/wordpress \
+RUN     mkdir /var/www \
+        && mkdir /var/www/html
 #    && tar -xvzf /tmp/wordpress.tar.gz -C /var/www/ \
 #    && rm /tmp/wordpress.tar.gz \
 #    && mv /var/www/wordpress/* /var/www/ \
@@ -85,15 +83,15 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 RUN chmod +x wp-cli.phar
 RUN cp wp-cli.phar /usr/bin/wp
 #RUN chown -R root:root /run/php /var/log/php7.3-fpm.log 
-#RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:root /var/www/
+RUN chown -R www-data:root /var/www/html/
 
 WORKDIR /var/www/html
-#USER www-data
 #WORKDIR /var/www/
 
 #RUN wp user create $WP_USR $WP_EMAIL --user_pass=$WP_PWD --role=subscriber --allow-root
-RUN find . -type d -exec chmod 755 {} \;
-RUN find . -type f -exec chmod 644 {} \;
+#RUN find . -type d -exec chmod 755 {} \;
+#RUN find . -type f -exec chmod 644 {} \;
 #EXPOSE 9000
 COPY tools/configure.sh /tmp/configure.sh
 #CMD ["/usr/sbin/php-fpm7", "--nodaemonize", "-c", "/etc/php7/php-fpm.conf"]

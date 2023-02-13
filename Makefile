@@ -1,6 +1,6 @@
 DOCKER_COMPOSE_PATH	=	./srcs/docker-compose.yml
 
-DATA_PATH			= /home/croce/Desktop/data
+DATA_PATH			= /home/croce/data
 DB_PATH				= $(DATA_PATH)/db/
 WP_PATH				= $(DATA_PATH)/wp/
 

@@ -14,4 +14,9 @@ RUN openssl req -x509 -newkey rsa:2048 -nodes -keyout /etc/ssl/private/key.pem -
 COPY conf/default.conf /etc/nginx/nginx.conf
 COPY conf/ssl.conf /etc/nginx/ssl.conf
 
+RUN mkdir /var/www/html
+RUN adduser -D -S -G root www-data
+RUN chown -R www-data:root /var/www/
+RUN chown -R www-data:root /var/www/html/
+
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
